@@ -16,7 +16,7 @@ ports {
   serf = 5658
 }
 
-plugin "ecs" {
+plugin "nomad-driver-ecs" {
   config {
     enabled = true
     cluster = "nomad-remote-driver-demo"
