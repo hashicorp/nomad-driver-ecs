@@ -78,7 +78,7 @@ func (c awsEcsClient) RunTask(ctx context.Context, cfg TaskConfig) (string, erro
 	input := c.buildTaskInput(cfg)
 
 	if err := input.Validate(); err != nil {
-		return "", nil
+		return "", fmt.Errorf("failed to validate: %w", err)
 	}
 
 	resp, err := c.ecsClient.RunTaskRequest(input).Send(ctx)
