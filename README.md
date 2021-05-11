@@ -1,10 +1,9 @@
 # Nomad ECS Driver Plugin (Experimental)
 The Nomad ECS driver plugin is an experimental type of remote driver plugin. Whereas traditional Nomad driver plugins rely on running processes locally to the client, this experiment allows for the control of tasks at a remote destination. The driver is responsible for the lifecycle management of the remote process, as well as performing health checks and health decisions.
 
-**Warning: this is an experimental feature and is therefore supplied without guarantees and is subject to change without warning. TL;DR: do not run this in production.**
+**Warning: this is an experimental feature and is therefore supplied without guarantees and is subject to change without warning. Do not run this in production.**
 
-## Requirements
-Nomad core required changes in order to allow for the functionality of remote task drivers. These code changes are currently stored in a feature branch due to their experimental status. In order to run the ecs driver, you will need to compile Nomad based off the `f-remotetask-3` branch.
+Nomad v1.1.0-beta1 or later is required.
 
 ## Demo
 A full demo can be found within the [demo directory](./demo) that will run through the full lifecycle of a task run under the ECS driver. It includes Terraform code to build the required AWS resources, as well as the Nomad configuration files and job specifications needed.
@@ -18,6 +17,7 @@ The Nomad ECS driver plugin supports the following configuration parameters:
  * `region` - (string: "") The AWS region to send all requests to.
 
 A example client plugin stanza looks like the following:
+
 ```hcl
 plugin "nomad-driver-ecs" {
   config {
