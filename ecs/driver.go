@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/hashicorp/go-hclog"
+	"github.com/hashicorp/nomad-driver-ecs/version"
 	"github.com/hashicorp/nomad/client/structs"
 	"github.com/hashicorp/nomad/drivers/shared/eventer"
 	"github.com/hashicorp/nomad/plugins/base"
@@ -19,10 +20,6 @@ import (
 const (
 	// pluginName is the name of the plugin.
 	pluginName = "ecs"
-
-	// pluginVersion allows the client to identify and use newer versions of
-	// an installed plugin.
-	pluginVersion = "v0.1.0"
 
 	// fingerprintPeriod is the interval at which the driver will send
 	// fingerprint responses.
@@ -39,7 +36,7 @@ var (
 	pluginInfo = &base.PluginInfoResponse{
 		Type:              base.PluginTypeDriver,
 		PluginApiVersions: []string{drivers.ApiVersion010},
-		PluginVersion:     pluginVersion,
+		PluginVersion:     version.Version,
 		Name:              pluginName,
 	}
 
