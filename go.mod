@@ -56,3 +56,5 @@ replace github.com/ugorji/go => github.com/hashicorp/go-msgpack v0.0.0-201909271
 replace github.com/hashicorp/go-msgpack => github.com/hashicorp/go-msgpack v0.0.0-20191101193846-96ddbed8d05b
 
 replace github.com/NVIDIA/gpu-monitoring-tools => github.com/notnoop/gpu-monitoring-tools v0.0.0-20200628182817-dfd5677e7d74
+
+replace github.com/Microsoft/go-winio => github.com/endocrimes/go-winio v0.4.13-0.20190628114223-fb47a8b41948
