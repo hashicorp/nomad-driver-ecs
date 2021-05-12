@@ -11,7 +11,7 @@ In order to run this demo, you will need the following items available.
 
  * An AWS account and API access credentials (specific policy requirements TBC)
  * Terraform > 0.12.0 - https://www.terraform.io/downloads.html
- * Custom Nomad binary which includes the remote task driver MVP
+ * [Nomad v1.1.0-beta1 or later](https://releases.hashicorp.com/nomad/)
 
 ## Assumptions / Rough Edges
 The demo makes some assumptions because of the quick, and local nature of it.
