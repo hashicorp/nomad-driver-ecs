@@ -43,18 +43,19 @@ When running this demo, a small number of AWS resources will be created. The maj
     ```
     $ cd ../nomad
     $ nomad agent -config=server.hcl
-    $ nomad agent -config=client-1.hcl
-    $ nomad agent -config=client-2.hcl
+    $ nomad agent -config=client-1.hcl -plugin-dir=$(pwd)/plugins
+    $ nomad agent -config=client-2.hcl -plugin-dir=$(pwd)/plugins
     ```
 1. Check the ECS driver status on a client node:
     ```
+    $ nomad node status # To see Node IDs
     $ nomad node status <node-id> |grep "Driver Status"
     ```
 
 ## Demo
 The following steps will demonstrate how Nomad, and the remote driver handle multiple situations that operators will likely come across during day-to-day cluster management. Notably, how Nomad attempts to minimise the impact of task availability even when its availability is degraded.
 
-1. Using the Terraform output from before, update the `demo-ecs.nomad` file to reflect these details. In particular these two parameters need updating:
+1. Using the Terraform output from before, update the `nomad/demo-ecs.nomad` file to reflect these details. In particular these two parameters need updating:
     ```
     security_groups  = ["sg-0d647d4c7ce15034f"]
     subnets          = ["subnet-010b03f1a021887ff"]
