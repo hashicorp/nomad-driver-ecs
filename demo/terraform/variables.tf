@@ -9,3 +9,9 @@ variable "ecs_task_definition_file" {
   type        = string
   default     = "./files/base-demo.json"
 }
+
+variable "region" {
+  description = "AWS region for ECS cluster. Update Nomad config if not using the default."
+  type        = string
+  default     = "us-east-1"
+}
