@@ -112,7 +112,7 @@ func (c awsEcsClient) buildTaskInput(cfg TaskConfig) *ecs.RunTaskInput {
 
 	// Handle the task networking setup.
 	if cfg.Task.NetworkConfiguration.TaskAWSVPCConfiguration.AssignPublicIP != "" {
-		input.NetworkConfiguration.AwsvpcConfiguration.AssignPublicIp = "ENABLED"
+		input.NetworkConfiguration.AwsvpcConfiguration.AssignPublicIp = cfg.Task.NetworkConfiguration.TaskAWSVPCConfiguration.AssignPublicIP
 	}
 	if len(cfg.Task.NetworkConfiguration.TaskAWSVPCConfiguration.SecurityGroups) > 0 {
 		input.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups = cfg.Task.NetworkConfiguration.TaskAWSVPCConfiguration.SecurityGroups
