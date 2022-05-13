@@ -1,7 +1,7 @@
 container {
-  dependencies = true
-  alpine_secdb = true
-  secrets      = true
+  dependencies = false
+  alpine_secdb = false
+  secrets      = false
 }
 
 binary {
