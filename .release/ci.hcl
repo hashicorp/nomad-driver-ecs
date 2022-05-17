@@ -136,22 +136,8 @@ event "verify" {
   }
 }
 
-event "promote-dev-docker" {
-  depends = ["verify"]
-  action "promote-dev-docker" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "promote-dev-docker"
-    depends      = ["verify"]
-  }
-
-  notification {
-    on = "fail"
-  }
-}
-
 event "fossa-scan" {
-  depends = ["promote-dev-docker"]
+  depends = ["verify"]
   action "fossa-scan" {
     organization = "hashicorp"
     repository   = "crt-workflows-common"
