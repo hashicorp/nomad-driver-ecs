@@ -58,22 +58,8 @@ event "security-scan-binaries" {
   }
 }
 
-event "security-scan-containers" {
-  depends = ["security-scan-binaries"]
-  action "security-scan-containers" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "security-scan-containers"
-    config       = "security-scan.hcl"
-  }
-
-  notification {
-    on = "fail"
-  }
-}
-
 event "notarize-darwin-amd64" {
-  depends = ["security-scan-containers"]
+  depends = ["security-scan-binaries"]
   action "notarize-darwin-amd64" {
     organization = "hashicorp"
     repository   = "crt-workflows-common"
