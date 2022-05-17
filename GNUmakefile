@@ -16,7 +16,6 @@ BIN_NAME     ?= $(PRODUCT_NAME)
 REVISION = $(shell git rev-parse HEAD)
 
 # Get local ARCH; on Intel Mac, 'uname -m' returns x86_64 which we turn into amd64.
-# Not using 'go env GOOS/GOARCH' here so 'make docker' will work without local Go install.
 OS   = $(strip $(shell echo -n $${GOOS:-$$(uname | tr [[:upper:]] [[:lower:]])}))
 ARCH = $(strip $(shell echo -n $${GOARCH:-$$(A=$$(uname -m); [ $$A = x86_64 ] && A=amd64 || [ $$A = aarch64 ] && A=arm64 ; echo $$A)}))
 PLATFORM ?= $(OS)/$(ARCH)

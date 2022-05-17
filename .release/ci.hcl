@@ -166,19 +166,6 @@ event "promote-staging" {
   }
 }
 
-event "promote-staging-docker" {
-  depends = ["promote-staging"]
-  action "promote-staging-docker" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "promote-staging-docker"
-  }
-
-  notification {
-    on = "always"
-  }
-}
-
 event "trigger-production" {
   // This event is dispatched by the bob trigger-promotion command
   // and is required - do not delete.
@@ -197,21 +184,8 @@ event "promote-production" {
   }
 }
 
-event "promote-production-docker" {
-  depends = ["promote-production"]
-  action "promote-production-docker" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "promote-production-docker"
-  }
-
-  notification {
-    on = "always"
-  }
-}
-
 event "promote-production-packaging" {
-  depends = ["promote-production-docker"]
+  depends = ["promote-production"]
   action "promote-production-packaging" {
     organization = "hashicorp"
     repository   = "crt-workflows-common"
