@@ -1,56 +1,52 @@
 SHELL = bash
+default: help
 
-GIT_COMMIT=$$(git rev-parse --short HEAD)
-GIT_BRANCH = $$(git branch --show-current)
-GIT_SHA    = $$(git rev-parse HEAD)
-GIT_DIRTY=$$(test -n "`git status --porcelain`" && echo "+CHANGES" || true)
-GIT_IMPORT="github.com/hashicorp/nomad-pack/internal/pkg/version"
-GO_LDFLAGS="-s -w -X $(GIT_IMPORT).GitCommit=$(GIT_COMMIT)$(GIT_DIRTY)"
-VERSION = $(shell ./scripts/version.sh version/version.go)
+GIT_COMMIT := $(shell git rev-parse --short HEAD)
+GIT_DIRTY := $(if $(shell git status --porcelain),+CHANGES)
 
-REPO_NAME    ?= $(shell basename "$(CURDIR)")
-PRODUCT_NAME ?= $(REPO_NAME)
-BIN_NAME     ?= $(PRODUCT_NAME)
+GO_LDFLAGS := "-X github.com/hashicorp/nomad-driver-ecs/version.GitCommit=$(GIT_COMMIT)$(GIT_DIRTY)"
 
-# Get latest revision (no dirty check for now).
-REVISION = $(shell git rev-parse HEAD)
-
-# Get local ARCH; on Intel Mac, 'uname -m' returns x86_64 which we turn into amd64.
-OS   = $(strip $(shell echo -n $${GOOS:-$$(uname | tr [[:upper:]] [[:lower:]])}))
-ARCH = $(strip $(shell echo -n $${GOARCH:-$$(A=$$(uname -m); [ $$A = x86_64 ] && A=amd64 || [ $$A = aarch64 ] && A=arm64 ; echo $$A)}))
-PLATFORM ?= $(OS)/$(ARCH)
-DIST     = dist/$(PLATFORM)
-BIN      = $(DIST)/$(BIN_NAME)
-
-ifeq ($(firstword $(subst /, ,$(PLATFORM))), windows)
-BIN = $(DIST)/$(BIN_NAME).exe
-endif
-
-PLUGIN_BINARY=nomad-driver-ecs
-export GO111MODULE=on
+HELP_FORMAT="    \033[36m%-25s\033[0m %s\n"
+.PHONY: help
+help: ## Display this usage information
+	@echo "Valid targets:"
+	@grep -E '^[^ ]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		sort | \
+		awk 'BEGIN {FS = ":.*?## "}; \
+			{printf $(HELP_FORMAT), $$1, $$2}'
+	@echo ""
 
 pkg/%/nomad-driver-ecs: GO_OUT ?= $@
-pkg/%/nomad-driver-ecs: ## Build Task Driver for GOOS_GOARCH, e.g. pkg/linux_amd64/nomad
+pkg/windows_%/nomad-driver-ecs: GO_OUT = $@.exe
+pkg/%/nomad-driver-ecs: ## Build nomad-driver-ecs plugin for GOOS_GOARCH, e.g. pkg/linux_amd64/nomad
 	@echo "==> Building $@ with tags $(GO_TAGS)..."
 	@CGO_ENABLED=0 \
 		GOOS=$(firstword $(subst _, ,$*)) \
 		GOARCH=$(lastword $(subst _, ,$*)) \
 		go build -trimpath -ldflags $(GO_LDFLAGS) -tags "$(GO_TAGS)" -o $(GO_OUT)
 
-pkg/windows_%/nomad-driver-ecs: GO_OUT = $@.exe
+.PRECIOUS: pkg/%/nomad-driver-ecs
+pkg/%.zip: pkg/%/nomad-driver-ecs ## Build and zip nomad-driver-ecs plugin for GOOS_GOARCH, e.g. pkg/linux_amd64.zip
+	@echo "==> Packaging for $@..."
+	zip -j $@ $(dir $<)*
 
-default: test build
+.PHONY: dev
+dev: ## Build for the current development version
+	@echo "==> Building nomad-driver-ecs..."
+	@CGO_ENABLED=0 \
+		go build \
+			-ldflags $(GO_LDFLAGS) \
+			-o ./bin/nomad-driver-ecs
+	@echo "==> Done"
 
-.PHONY: clean
-clean: ## Remove build artifacts
-	rm -rf ${PLUGIN_BINARY}
-
-build:
-	go build -o bin/${PLUGIN_BINARY} .
-
-test:
+.PHONY: test
+test: ## Run tests
 	go test -v -race ./...
 
 .PHONY: version
 version:
-	@$(CURDIR)/scripts/version.sh version/version.go
+ifneq (,$(wildcard version/version_ent.go))
+	@$(CURDIR)/scripts/version.sh version/version.go version/version_ent.go
+else
+	@$(CURDIR)/scripts/version.sh version/version.go version/version.go
+endif

@@ -110,19 +110,6 @@ event "sign" {
   }
 }
 
-event "sign-linux-rpms" {
-  depends = ["sign"]
-  action "sign-linux-rpms" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "sign-linux-rpms"
-  }
-
-  notification {
-    on = "fail"
-  }
-}
-
 event "verify" {
   depends = ["sign-linux-rpms"]
   action "verify" {
@@ -177,19 +164,6 @@ event "promote-production" {
     organization = "hashicorp"
     repository   = "crt-workflows-common"
     workflow     = "promote-production"
-  }
-
-  notification {
-    on = "always"
-  }
-}
-
-event "promote-production-packaging" {
-  depends = ["promote-production"]
-  action "promote-production-packaging" {
-    organization = "hashicorp"
-    repository   = "crt-workflows-common"
-    workflow     = "promote-production-packaging"
   }
 
   notification {
