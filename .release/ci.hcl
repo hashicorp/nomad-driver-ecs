@@ -11,7 +11,6 @@ project "nomad-driver-ecs" {
     repository   = "nomad-driver-ecs"
     release_branches = [
       "main",
-      "crt-onboarding",
     ]
   }
 }
