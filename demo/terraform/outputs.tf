@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 output "demo_subnet_id" {
   value = aws_subnet.nomad_remote_driver_demo.id
 }

@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 resource "aws_ecs_cluster" "nomad_remote_driver_demo" {
   name = "nomad-remote-driver-demo"
 }
