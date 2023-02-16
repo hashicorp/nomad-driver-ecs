@@ -59,6 +59,7 @@ var (
 		"launch_type":           hclspec.NewAttr("launch_type", "string", false),
 		"task_definition":       hclspec.NewAttr("task_definition", "string", false),
 		"network_configuration": hclspec.NewBlock("network_configuration", false, awsECSNetworkConfigSpec),
+		"tags":                  hclspec.NewAttr("tags", "list(map(string))", false),
 	})
 
 	// awsECSNetworkConfigSpec is the network configuration for the task.
@@ -130,6 +131,12 @@ type ECSTaskConfig struct {
 	LaunchType           string                   `codec:"launch_type"`
 	TaskDefinition       string                   `codec:"task_definition"`
 	NetworkConfiguration TaskNetworkConfiguration `codec:"network_configuration"`
+	Tags                 []Tag                    `codec:"tags"`
+}
+
+type Tag struct {
+	Key   string `codec:"key"`
+	Value string `codec:"value"`
 }
 
 type TaskNetworkConfiguration struct {

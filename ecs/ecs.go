@@ -98,6 +98,17 @@ func (c awsEcsClient) buildTaskInput(cfg TaskConfig) *ecs.RunTaskInput {
 		NetworkConfiguration: &ecs.NetworkConfiguration{AwsvpcConfiguration: &ecs.AwsVpcConfiguration{}},
 	}
 
+	if len(cfg.Task.Tags) > 0 {
+		tags := []ecs.Tag{}
+		for _, tag := range cfg.Task.Tags {
+			tags = append(tags, ecs.Tag{
+				Key:   aws.String(tag.Key),
+				Value: aws.String(tag.Value),
+			})
+		}
+		input.Tags = tags
+	}
+
 	if cfg.Task.LaunchType != "" {
 		if cfg.Task.LaunchType == "EC2" {
 			input.LaunchType = ecs.LaunchTypeEc2
